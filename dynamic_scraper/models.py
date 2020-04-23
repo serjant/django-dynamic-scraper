@@ -1,4 +1,4 @@
-#Stage 2 Update (Python 3)
+# Stage 2 Update (Python 3)
 from __future__ import unicode_literals
 from builtins import range
 from builtins import str
@@ -23,14 +23,14 @@ class ScrapedObjClass(models.Model):
 "ZERO_ACTIONS_FACTOR_CHANGE": 5,\n\
 "FACTOR_CHANGE_FACTOR": 1.3,\n')
     comments = models.TextField(blank=True)
-    
+
     def __str__(self):
         return self.name
 
     class Meta(object):
         verbose_name = "Scraped object class"
         verbose_name_plural = "Scraped object classes"
-        ordering = ['name',]
+        ordering = ['name', ]
 
 
 class ScrapedObjAttr(models.Model):
@@ -43,16 +43,16 @@ class ScrapedObjAttr(models.Model):
     )
     name = models.CharField(max_length=200)
     order = models.IntegerField(default=100)
-    obj_class = models.ForeignKey(ScrapedObjClass)
+    obj_class = models.ForeignKey(ScrapedObjClass, on_delete=models.DO_NOTHING)
     attr_type = models.CharField(max_length=1, choices=ATTR_TYPE_CHOICES)
     id_field = models.BooleanField(default=False)
     save_to_db = models.BooleanField(default=True)
-    
+
     def __str__(self):
         return self.name + " (" + str(self.obj_class) + ")"
-    
+
     class Meta(object):
-        ordering = ['order',]
+        ordering = ['order', ]
 
 
 class Scraper(models.Model):
@@ -108,28 +108,28 @@ class Scraper(models.Model):
     pagination_type = models.CharField(max_length=1, choices=PAGINATION_TYPE, default='N')
     pagination_on_start = models.BooleanField(default=False)
     pagination_append_str = models.CharField(max_length=200, blank=True, help_text="Syntax: /somepartofurl/{page}/moreurlstuff.html")
-    pagination_page_replace = models.TextField(blank=True, 
-        help_text="RANGE_FUNCT: uses Python range funct., syntax: [start], stop[, step], FREE_LIST: 'Replace text 1', 'Some other text 2', 'Maybe a number 3', ...")
+    pagination_page_replace = models.TextField(blank=True,
+                                               help_text="RANGE_FUNCT: uses Python range funct., syntax: [start], stop[, step], FREE_LIST: 'Replace text 1', 'Some other text 2', 'Maybe a number 3', ...")
     help_text = "Optional, follow links from a single non-paginated or all statically paginated (RANGE_FUNCT, FREE_LIST) main pages"
     follow_pages_url_xpath = models.TextField(blank=True, help_text=help_text)
     help_text = "Optional additional XPath for the page number, can be used in {follow_page} placeholder."
     follow_pages_page_xpath = models.TextField(blank=True, help_text=help_text)
     help_text = "Optionally limit number of pages to follow (default: follow until XPath fails)"
     num_pages_follow = models.IntegerField(blank=True, null=True, help_text=help_text)
-    last_scraper_save_alert_period = models.CharField(max_length=5, blank=True, 
-        help_text="Optional, used for scraper monitoring with 'check_last_scraper_saves' management cmd, \
+    last_scraper_save_alert_period = models.CharField(max_length=5, blank=True,
+                                                      help_text="Optional, used for scraper monitoring with 'check_last_scraper_saves' management cmd, \
         syntax: [HOURS]h or [DAYS]d or [WEEKS]w (e.g. '6h', '5d', '2w')")
     next_last_scraper_save_alert = models.DateTimeField(default=datetime.datetime.now,
-        help_text="Next time the last scraper save will be alerted, normally set on management cmd run.",)
-    last_checker_delete_alert_period = models.CharField(max_length=5, blank=True, 
-        help_text="Optional, used for scraper monitoring with 'check_last_checker_deletes' management cmd, \
+                                                        help_text="Next time the last scraper save will be alerted, normally set on management cmd run.", )
+    last_checker_delete_alert_period = models.CharField(max_length=5, blank=True,
+                                                        help_text="Optional, used for scraper monitoring with 'check_last_checker_deletes' management cmd, \
         syntax: [HOURS]h or [DAYS]d or [WEEKS]w (e.g. '6h', '5d', '2w')")
     next_last_checker_delete_alert = models.DateTimeField(default=datetime.datetime.now,
-        help_text="Next time the last checker delete will be alerted, normally set on management cmd run.",)
+                                                          help_text="Next time the last checker delete will be alerted, normally set on management cmd run.", )
     comments = models.TextField(blank=True)
     last_scraper_save = models.DateTimeField(null=True, blank=True)
     last_checker_delete = models.DateTimeField(null=True, blank=True)
-    
+
     def get_alert_period_timedelta(self, attribute_str):
         if getattr(self, attribute_str) and len(getattr(self, attribute_str)) >= 2:
             period_str = getattr(self, attribute_str)[-1]
@@ -149,16 +149,16 @@ class Scraper(models.Model):
                 return None
         else:
             return None
-    
+
     def get_last_scraper_save_alert_period_timedelta(self):
         return self.get_alert_period_timedelta('last_scraper_save_alert_period')
-    
+
     def get_last_checker_delete_alert_period_timedelta(self):
         return self.get_alert_period_timedelta('last_checker_delete_alert_period')
-    
+
     def get_main_page_rpt(self):
         return self.requestpagetype_set.get(page_type='MP')
-    
+
     def get_follow_page_rpts(self):
         return self.requestpagetype_set.filter(page_type='FP')
 
@@ -173,16 +173,16 @@ class Scraper(models.Model):
 
     def get_base_elems(self):
         return self.scraperelem_set.filter(scraped_obj_attr__attr_type='B')
-    
+
     def get_base_elem(self):
         return self.scraperelem_set.get(scraped_obj_attr__attr_type='B')
-    
+
     def get_detail_page_url_elems(self):
         return self.scraperelem_set.filter(scraped_obj_attr__attr_type='U')
 
     def get_detail_page_url_id_elems(self):
         return self.scraperelem_set.filter(scraped_obj_attr__attr_type='U', scraped_obj_attr__id_field=True)
-    
+
     def get_standard_elems(self):
         q1 = Q(scraped_obj_attr__attr_type='S')
         q2 = Q(scraped_obj_attr__attr_type='T')
@@ -200,39 +200,40 @@ class Scraper(models.Model):
 
     def get_standard_update_elems_from_detail_pages(self):
         return self.scraperelem_set.filter(scraped_obj_attr__attr_type='T').filter(~Q(request_page_type='MP'))
-    
+
     def get_image_elems(self):
         return self.scraperelem_set.filter(scraped_obj_attr__attr_type='I')
-    
+
     def get_image_elem(self):
         return self.scraperelem_set.get(scraped_obj_attr__attr_type='I')
-    
+
     def get_scrape_elems(self):
         q1 = Q(scraped_obj_attr__attr_type='S')
         q2 = Q(scraped_obj_attr__attr_type='T')
         q3 = Q(scraped_obj_attr__attr_type='U')
         q4 = Q(scraped_obj_attr__attr_type='I')
         return self.scraperelem_set.filter(q1 | q2 | q3 | q4)
-    
+
     def get_mandatory_scrape_elems(self):
         q1 = Q(scraped_obj_attr__attr_type='S')
         q2 = Q(scraped_obj_attr__attr_type='T')
         q3 = Q(scraped_obj_attr__attr_type='U')
         q4 = Q(scraped_obj_attr__attr_type='I')
         return self.scraperelem_set.filter(q1 | q2 | q3 | q4).filter(mandatory=True)
-    
+
     def get_from_detail_pages_scrape_elems(self):
         return self.scraperelem_set.filter(~Q(request_page_type='MP'))
-    
+
     def __str__(self):
         return self.name + " (" + self.scraped_obj_class.name + ")"
-    
+
     class Meta(object):
-        ordering = ['name', 'scraped_obj_class',]
+        ordering = ['name', 'scraped_obj_class', ]
 
 
 class RequestPageType(models.Model):
-    TYPE_CHOICES = tuple([("MP", "Main Page"), ("FP", "Follow Page"),] + [("DP{n}".format(n=str(n)), "Detail Page {n}".format(n=str(n))) for n in list(range(1, 26))])
+    TYPE_CHOICES = tuple(
+        [("MP", "Main Page"), ("FP", "Follow Page"), ] + [("DP{n}".format(n=str(n)), "Detail Page {n}".format(n=str(n))) for n in list(range(1, 26))])
     CONTENT_TYPE_CHOICES = (
         ('H', 'HTML'),
         ('X', 'XML'),
@@ -248,18 +249,27 @@ class RequestPageType(models.Model):
     )
     help_text = "One main page RPT, an optional follow page RPT (if follow pagination is used) and detail page RPTs for all DETAIL_PAGE_URLs"
     page_type = models.CharField(max_length=3, choices=TYPE_CHOICES, help_text=help_text)
-    scraped_obj_attr = models.ForeignKey(ScrapedObjAttr, blank=True, null=True, help_text="Empty for main page, attribute of type DETAIL_PAGE_URL scraped from main page for detail pages.")
+    scraped_obj_attr = models.ForeignKey(ScrapedObjAttr, blank=True, null=True,
+                                         help_text="Empty for main page, attribute of type DETAIL_PAGE_URL scraped from main page for detail pages.")
     scraper = models.ForeignKey(Scraper)
-    content_type = models.CharField(max_length=1, choices=CONTENT_TYPE_CHOICES, default='H', help_text="Data type format for scraped pages of page type (for JSON use JSONPath instead of XPath)")
-    render_javascript = models.BooleanField(default=False, help_text="Render Javascript on pages (ScrapyJS/Splash deployment needed, careful: resource intense)")
-    request_type = models.CharField(max_length=1, choices=REQUEST_TYPE_CHOICES, default='R', help_text="Normal (typically GET) request (default) or form request (typically POST), using Scrapys corresponding request classes (not used for checker).")
+    content_type = models.CharField(max_length=1, choices=CONTENT_TYPE_CHOICES, default='H',
+                                    help_text="Data type format for scraped pages of page type (for JSON use JSONPath instead of XPath)")
+    render_javascript = models.BooleanField(default=False,
+                                            help_text="Render Javascript on pages (ScrapyJS/Splash deployment needed, careful: resource intense)")
+    request_type = models.CharField(max_length=1, choices=REQUEST_TYPE_CHOICES, default='R',
+                                    help_text="Normal (typically GET) request (default) or form request (typically POST), using Scrapys corresponding request classes (not used for checker).")
     method = models.CharField(max_length=10, choices=METHOD_CHOICES, default='GET', help_text="HTTP request via GET or POST.")
-    headers = models.TextField(blank=True, help_text='Optional HTTP headers sent with each request, provided as a JSON dict (e.g. {"Referer":"http://referer_url"}, use double quotes!)), can use {main page attribute}, {page} and {follow_page} placeholders.')
-    body = models.TextField(blank=True, help_text="Optional HTTP message body provided as a unicode string, can use {main page attribute}, {page} and {follow_page} placeholders.")
-    cookies = models.TextField(blank=True, help_text="Optional cookies as JSON dict (use double quotes!), can use {main page attribute}, {page} and {follow_page} placeholders.")
+    headers = models.TextField(blank=True,
+                               help_text='Optional HTTP headers sent with each request, provided as a JSON dict (e.g. {"Referer":"http://referer_url"}, use double quotes!)), can use {main page attribute}, {page} and {follow_page} placeholders.')
+    body = models.TextField(blank=True,
+                            help_text="Optional HTTP message body provided as a unicode string, can use {main page attribute}, {page} and {follow_page} placeholders.")
+    cookies = models.TextField(blank=True,
+                               help_text="Optional cookies as JSON dict (use double quotes!), can use {main page attribute}, {page} and {follow_page} placeholders.")
     meta = models.TextField(blank=True, help_text="Optional Scrapy meta attributes as JSON dict (use double quotes!), see Scrapy docs for reference.")
-    form_data = models.TextField(blank=True, help_text="Optional HTML form data as JSON dict (use double quotes!), only used with FormRequest request type, can use {main page attribute}, {page} and {follow_page} placeholders.")
-    dont_filter = models.BooleanField(default=False, help_text="Do not filter duplicate requests, useful for some scenarios with requests falsely marked as being duplicate (e.g. uniform URL + pagination by HTTP header).")
+    form_data = models.TextField(blank=True,
+                                 help_text="Optional HTML form data as JSON dict (use double quotes!), only used with FormRequest request type, can use {main page attribute}, {page} and {follow_page} placeholders.")
+    dont_filter = models.BooleanField(default=False,
+                                      help_text="Do not filter duplicate requests, useful for some scenarios with requests falsely marked as being duplicate (e.g. uniform URL + pagination by HTTP header).")
     comments = models.TextField(blank=True)
 
     def __str__(self):
@@ -274,23 +284,24 @@ class Checker(models.Model):
         ('4', '404'),
         ('X', '404_OR_X_PATH'),
     )
-    scraped_obj_attr = models.ForeignKey(ScrapedObjAttr, help_text="Attribute of type DETAIL_PAGE_URL, several checkers for same DETAIL_PAGE_URL attribute possible.")
+    scraped_obj_attr = models.ForeignKey(ScrapedObjAttr,
+                                         help_text="Attribute of type DETAIL_PAGE_URL, several checkers for same DETAIL_PAGE_URL attribute possible.")
     scraper = models.ForeignKey(Scraper)
     checker_type = models.CharField(max_length=1, choices=CHECKER_TYPE, default='4')
     checker_x_path = models.TextField(blank=True)
     checker_x_path_result = models.TextField(blank=True)
     checker_ref_url = models.URLField(max_length=500, blank=True)
     comments = models.TextField(blank=True)
-    
+
     def __str__(self):
-        return  str(self.scraped_obj_attr) + ' > ' + self.get_checker_type_display()
-    
+        return str(self.scraped_obj_attr) + ' > ' + self.get_checker_type_display()
+
 
 class ScraperElem(models.Model):
     REQUEST_PAGE_TYPE_CHOICES = tuple([("MP", "Main Page")] + [("DP{n}".format(n=str(n)), "Detail Page {n}".format(n=str(n))) for n in list(range(1, 26))])
     help_text = "The different attributes to be scraped, exactly one attribute of type BASE necessary."
     scraped_obj_attr = models.ForeignKey(ScrapedObjAttr, help_text=help_text)
-    scraper = models.ForeignKey(Scraper)   
+    scraper = models.ForeignKey(Scraper)
     x_path = models.TextField(blank=True, help_text='XPath or JSONPath expression, leave blank on "static" processor use.')
     reg_exp = models.TextField(blank=True, help_text="Optional filtering by regular expression (e.g. 'Scrape only (.*) the text in between').")
     help_text = "Corresponding Request Page Types created for this scraper."
@@ -303,16 +314,15 @@ class ScraperElem(models.Model):
     proc_ctxt = models.TextField(blank=True, help_text=help_text)
     help_text = "Drop item if attribute could not be scraped."
     mandatory = models.BooleanField(default=True, help_text=help_text)
-    
+
     def __str__(self):
         return '{s} > {soa} Attribute ({rpt})'.format(
             s=str(self.scraper),
             soa=self.scraped_obj_attr.name,
             rpt=self.get_request_page_type_display())
-    
+
     class Meta(object):
-        ordering = ['scraped_obj_attr__order',]
-    
+        ordering = ['scraped_obj_attr__order', ]
 
 
 class SchedulerRuntime(models.Model):
@@ -324,12 +334,12 @@ class SchedulerRuntime(models.Model):
     next_action_time = models.DateTimeField(default=datetime.datetime.now)
     next_action_factor = models.FloatField(blank=True, null=True)
     num_zero_actions = models.IntegerField(default=0)
-    
+
     def __str__(self):
         return str(self.id)
-    
+
     class Meta(object):
-        ordering = ['next_action_time',]
+        ordering = ['next_action_time', ]
 
 
 class LogMarker(models.Model):
@@ -339,7 +349,7 @@ class LogMarker(models.Model):
         ('IM', 'Important'),
         ('IG', 'Ignore'),
         ('MI', 'Miscellaneous'),
-        ('CU', 'Custom'),            
+        ('CU', 'Custom'),
     )
     message_contains = models.CharField(max_length=255)
     help_text = "Use the string format from the log messages"
@@ -366,14 +376,14 @@ class Log(models.Model):
     spider_name = models.CharField(max_length=200)
     scraper = models.ForeignKey(Scraper, blank=True, null=True)
     date = models.DateTimeField(default=datetime.datetime.now)
-    
+
     @staticmethod
     def numeric_level(level):
         numeric_level = 0
         for choice in Log.LEVEL_CHOICES:
             if choice[1] == level:
                 numeric_level = choice[0]
-        return numeric_level        
-    
+        return numeric_level
+
     class Meta(object):
         ordering = ['-date']
