@@ -35,13 +35,13 @@ setup(
     #    'scrapy-djangoitem>=1.1.1,<1.2',
     #    'scrapy-splash>=0.7,<0.8', # Optional
     #    'scrapyd>=1.2,<1.3',
-        'jsonpath-rw>=1.4',
+        'jsonpath-rw>=1.4.0',
     #    'kombu>=3.0.37,<3.1',
     #    'Celery==3.1.25',
     #    'django-celery==3.2.1', # Scheduling
-        'future>=0.17,<0.18',
+        'future>=0.18.2',
         'pillow>=7.1.1',
-        'attrs>=17.4.0',
+        'attrs>=19.3.0',
     ],
     classifiers=[
         'Development Status :: 4 - Beta',
