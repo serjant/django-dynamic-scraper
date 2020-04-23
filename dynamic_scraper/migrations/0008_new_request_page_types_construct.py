@@ -54,8 +54,8 @@ class Migration(migrations.Migration):
                 ('meta', models.TextField(help_text=b'Optional Scrapy meta attributes as JSON dict (use double quotes!), see Scrapy docs for reference.', blank=True)),
                 ('form_data', models.TextField(help_text=b'Optional HTML form data as JSON dict (use double quotes!), only used with FormRequest request type, can use {page} placeholder of pagination.', blank=True)),
                 ('dont_filter', models.BooleanField(default=False, help_text=b'Do not filter duplicate requests, useful for some scenarios with requests falsely marked as being duplicate (e.g. uniform URL + pagination by HTTP header).')),
-                ('scraped_obj_attr', models.ForeignKey(blank=True, to='dynamic_scraper.ScrapedObjAttr', help_text=b'Empty for main page, attribute of type URL scraped from main page for detail pages.', null=True)),
-                ('scraper', models.ForeignKey(to='dynamic_scraper.Scraper')),
+                ('scraped_obj_attr', models.ForeignKey(blank=True, to='dynamic_scraper.ScrapedObjAttr', help_text=b'Empty for main page, attribute of type URL scraped from main page for detail pages.', null=True,on_delete=models.DO_NOTHING)),
+                ('scraper', models.ForeignKey(to='dynamic_scraper.Scraper',on_delete=models.DO_NOTHING)),
             ],
         ),
         migrations.AddField(

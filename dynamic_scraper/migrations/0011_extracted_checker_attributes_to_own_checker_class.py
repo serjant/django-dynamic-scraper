@@ -38,8 +38,8 @@ class Migration(migrations.Migration):
                 ('checker_x_path_result', models.CharField(max_length=200, blank=True)),
                 ('checker_ref_url', models.URLField(max_length=500, blank=True)),
                 ('comments', models.TextField(blank=True)),
-                ('scraped_obj_attr', models.ForeignKey(help_text=b'Attribute of type DETAIL_PAGE_URL, several checkers for same DETAIL_PAGE_URL attribute possible.', to='dynamic_scraper.ScrapedObjAttr')),
-                ('scraper', models.ForeignKey(to='dynamic_scraper.Scraper')),
+                ('scraped_obj_attr', models.ForeignKey(help_text=b'Attribute of type DETAIL_PAGE_URL, several checkers for same DETAIL_PAGE_URL attribute possible.',on_delete=models.DO_NOTHING, to='dynamic_scraper.ScrapedObjAttr')),
+                ('scraper', models.ForeignKey(to='dynamic_scraper.Scraper',on_delete=models.DO_NOTHING)),
             ],
         ),
         migrations.AddField(
@@ -50,7 +50,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='requestpagetype',
             name='scraped_obj_attr',
-            field=models.ForeignKey(blank=True, to='dynamic_scraper.ScrapedObjAttr', help_text=b'Empty for main page, attribute of type DETAIL_PAGE_URL scraped from main page for detail pages.', null=True),
+            field=models.ForeignKey(blank=True, to='dynamic_scraper.ScrapedObjAttr', help_text=b'Empty for main page, attribute of type DETAIL_PAGE_URL scraped from main page for detail pages.', null=True,on_delete=models.DO_NOTHING),
         ),
         migrations.RunPython(create_default_checker_objects),
     ]

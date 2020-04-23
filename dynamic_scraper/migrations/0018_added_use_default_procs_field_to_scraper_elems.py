@@ -46,7 +46,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='scraperelem',
             name='scraped_obj_attr',
-            field=models.ForeignKey(help_text='The different attributes to be scraped, exactly one attribute of type BASE necessary.', on_delete=django.db.models.deletion.CASCADE, to='dynamic_scraper.ScrapedObjAttr'),
+            field=models.ForeignKey(help_text='The different attributes to be scraped, exactly one attribute of type BASE necessary.', on_delete=models.CASCADE, to='dynamic_scraper.ScrapedObjAttr'),
         ),
         migrations.AlterField(
             model_name='scraperelem',
