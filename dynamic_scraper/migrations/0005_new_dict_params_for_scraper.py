@@ -34,6 +34,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='scraper',
             name='request_type',
-            field=models.CharField(default=b'R', help_text=b'Normal GET request (default) or form request via POST, using Scrapys corresponding request classes (not used for checker).', max_length=2, choices=[(b'R', b'Request (GET)'), (b'F', b'FormRequest (POST)')]),
+            field=models.CharField(default=b'R', help_text=b'Normal GET request (default) or form request via POST, using Scrapys corresponding request classes (not used for checker).', max_length=4,choices=[(b'R', b'Request (GET)'), (b'F', b'FormRequest (POST)')]),
         ),
     ]

@@ -44,7 +44,7 @@ class ScrapedObjAttr(models.Model):
     name = models.CharField(max_length=200)
     order = models.IntegerField(default=100)
     obj_class = models.ForeignKey(ScrapedObjClass, on_delete=models.DO_NOTHING)
-    attr_type = models.CharField(max_length=2, choices=ATTR_TYPE_CHOICES)
+    attr_type = models.CharField(max_length=4,choices=ATTR_TYPE_CHOICES)
     id_field = models.BooleanField(default=False)
     save_to_db = models.BooleanField(default=True)
 
@@ -98,14 +98,14 @@ class Scraper(models.Model):
     name = models.CharField(max_length=200)
     scraped_obj_class = models.ForeignKey(ScrapedObjClass, on_delete=models.DO_NOTHING)
     help_text = "Runtime status of the scraper, used by scheduling mechanism."
-    status = models.CharField(max_length=2, choices=STATUS_CHOICES, default='P', help_text=help_text)
+    status = models.CharField(max_length=4,choices=STATUS_CHOICES, default='P', help_text=help_text)
     help_text = "Internal work/progress status of the scraper."
     work_status = models.CharField(max_length=4, choices=WORK_STATUS_CHOICES, default='N', help_text=help_text)
     help_text = "Optional owner when working on scrapers with various people"
     owner = models.CharField(max_length=12, blank=True, help_text=help_text)
     max_items_read = models.IntegerField(blank=True, null=True, help_text="Max number of items to be read (empty: unlimited).")
     max_items_save = models.IntegerField(blank=True, null=True, help_text="Max number of items to be saved (empty: unlimited).")
-    pagination_type = models.CharField(max_length=2, choices=PAGINATION_TYPE, default='N')
+    pagination_type = models.CharField(max_length=4,choices=PAGINATION_TYPE, default='N')
     pagination_on_start = models.BooleanField(default=False)
     pagination_append_str = models.CharField(max_length=200, blank=True, help_text="Syntax: /somepartofurl/{page}/moreurlstuff.html")
     pagination_page_replace = models.TextField(blank=True,
@@ -288,7 +288,7 @@ class Checker(models.Model):
     scraped_obj_attr = models.ForeignKey(ScrapedObjAttr,
                                          help_text="Attribute of type DETAIL_PAGE_URL, several checkers for same DETAIL_PAGE_URL attribute possible.", on_delete=models.DO_NOTHING)
     scraper = models.ForeignKey(Scraper, on_delete=models.DO_NOTHING)
-    checker_type = models.CharField(max_length=2, choices=CHECKER_TYPE, default='4')
+    checker_type = models.CharField(max_length=4,choices=CHECKER_TYPE, default='4')
     checker_x_path = models.TextField(blank=True)
     checker_x_path_result = models.TextField(blank=True)
     checker_ref_url = models.URLField(max_length=500, blank=True)
@@ -331,7 +331,7 @@ class SchedulerRuntime(models.Model):
         ('S', 'SCRAPER'),
         ('C', 'CHECKER'),
     )
-    runtime_type = models.CharField(max_length=2, choices=TYPE, default='P')
+    runtime_type = models.CharField(max_length=4,choices=TYPE, default='P')
     next_action_time = models.DateTimeField(default=datetime.datetime.now)
     next_action_factor = models.FloatField(blank=True, null=True)
     num_zero_actions = models.IntegerField(default=0)

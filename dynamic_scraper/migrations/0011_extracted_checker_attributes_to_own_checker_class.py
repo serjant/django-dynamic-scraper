@@ -33,7 +33,7 @@ class Migration(migrations.Migration):
             name='Checker',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('checker_type', models.CharField(default=b'4', max_length=2, choices=[(b'4', b'404'), (b'X', b'404_OR_X_PATH')])),
+                ('checker_type', models.CharField(default=b'4', max_length=4,choices=[(b'4', b'404'), (b'X', b'404_OR_X_PATH')])),
                 ('checker_x_path', models.CharField(max_length=200, blank=True)),
                 ('checker_x_path_result', models.CharField(max_length=200, blank=True)),
                 ('checker_ref_url', models.URLField(max_length=500, blank=True)),

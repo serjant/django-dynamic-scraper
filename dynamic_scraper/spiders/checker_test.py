@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 from builtins import str
 import logging
-from scrapy import signals
+from scrapy import signals, FormRequest
 from scrapy.exceptions import CloseSpider
 from scrapy.http import Request
 from pydispatch import dispatcher
