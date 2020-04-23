@@ -248,16 +248,16 @@ class RequestPageType(models.Model):
         ('POST', 'POST'),
     )
     help_text = "One main page RPT, an optional follow page RPT (if follow pagination is used) and detail page RPTs for all DETAIL_PAGE_URLs"
-    page_type = models.CharField(max_length=3, choices=TYPE_CHOICES, help_text=help_text)
+    page_type = models.CharField(max_length=4, choices=TYPE_CHOICES, help_text=help_text)
     scraped_obj_attr = models.ForeignKey(ScrapedObjAttr, blank=True, null=True,
                                          help_text="Empty for main page, attribute of type DETAIL_PAGE_URL scraped from main page for detail pages.",
                                          on_delete=models.DO_NOTHING)
     scraper = models.ForeignKey(Scraper, on_delete=models.DO_NOTHING)
-    content_type = models.CharField(max_length=1, choices=CONTENT_TYPE_CHOICES, default='H',
+    content_type = models.CharField(max_length=2, choices=CONTENT_TYPE_CHOICES, default='H',
                                     help_text="Data type format for scraped pages of page type (for JSON use JSONPath instead of XPath)")
     render_javascript = models.BooleanField(default=False,
                                             help_text="Render Javascript on pages (ScrapyJS/Splash deployment needed, careful: resource intense)")
-    request_type = models.CharField(max_length=1, choices=REQUEST_TYPE_CHOICES, default='R',
+    request_type = models.CharField(max_length=2, choices=REQUEST_TYPE_CHOICES, default='R',
                                     help_text="Normal (typically GET) request (default) or form request (typically POST), using Scrapys corresponding request classes (not used for checker).")
     method = models.CharField(max_length=10, choices=METHOD_CHOICES, default='GET', help_text="HTTP request via GET or POST.")
     headers = models.TextField(blank=True,
@@ -306,7 +306,7 @@ class ScraperElem(models.Model):
     x_path = models.TextField(blank=True, help_text='XPath or JSONPath expression, leave blank on "static" processor use.')
     reg_exp = models.TextField(blank=True, help_text="Optional filtering by regular expression (e.g. 'Scrape only (.*) the text in between').")
     help_text = "Corresponding Request Page Types created for this scraper."
-    request_page_type = models.CharField(max_length=3, choices=REQUEST_PAGE_TYPE_CHOICES, default="MP", help_text=help_text)
+    request_page_type = models.CharField(max_length=4, choices=REQUEST_PAGE_TYPE_CHOICES, default="MP", help_text=help_text)
     help_text = "Use the default processors (Scrapy TakeFirst, DDS string_strip) for convenience."
     use_default_procs = models.BooleanField(default=True, help_text=help_text)
     help_text = 'Optional comma-separated list of processors used (e.g. "pre_url, post_string").'
