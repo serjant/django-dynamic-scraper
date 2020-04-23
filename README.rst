@@ -6,6 +6,7 @@ django-dynamic-scraper
 
 - 适配 python3.8
 - 适配 django3
+- 其他依赖类库更新
 
 
 Django Dynamic Scraper (DDS) is an app for Django which builds on top of the scraping framework Scrapy and lets
