@@ -6,7 +6,7 @@ setup(
     name='django-dynamic-scraper',
     version='0.13.2',
     description='Creating Scrapy scrapers via the Django admin interface',
-    author='Holger Drewes',
+    author='Felix Yin, Holger Drewes',
     author_email='Holger.Drewes@gmail.com',
     url='https://github.com/holgerd77/django-dynamic-scraper/',
     long_description=open(os.path.join(os.path.dirname(__file__), 'README.rst')).read(),
