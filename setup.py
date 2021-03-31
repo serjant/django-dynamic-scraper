@@ -9,7 +9,7 @@ setup(
     author='Felix Yin, Holger Drewes',
     author_email='Holger.Drewes@gmail.com',
     url='https://github.com/holgerd77/django-dynamic-scraper/',
-    long_description=open(os.path.join(os.path.dirname(__file__), 'README.rst')).read(),
+    long_description=open(os.path.join(os.path.dirname(__file__), 'README.rst'), encoding="utf-8").read(),
     license='BSD License',
     platforms=['OS Independent'],
     packages=[
